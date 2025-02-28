@@ -1,5 +1,6 @@
 
 import time
+import random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -60,6 +61,7 @@ def openURL(page=1,num=2):
                 sheet['G' + str(num)] = address
                 sheet['H' + str(num)] = recommend
                 sheet['I' + str(num)] = pic
+                sheet['I' + str(num)] = 'web'
                 num = num + 1
             except Exception as e:
                 print(e)
@@ -72,14 +74,17 @@ def openURL(page=1,num=2):
     print(f'第{page}页，获取成功')
     print(num)
     page = page + 1
-    if page == 5:
+    if page == 51:
         return False
     else:
-        time.sleep(3)
+        # 生成5-60的随机数用作停留时间
+        r_timer = random.randint(5, 60)
+        print(f'停留时间为{r_timer}秒')
+        time.sleep(r_timer)
         return openURL(page,num)
     # print(doc.text())
 
 
 if __name__ == '__main__':
     print('开始获取数据')
-    openURL(5,62)
+    openURL(20,287)
