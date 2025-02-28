@@ -14,12 +14,14 @@ option.debugger_address = "localhost:9222"
 # chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\selenum\AutomationProfile"
 
 # 打开地址
-def openURL(url,page=1,num=2):
+def openURL(page=1,num=2):
     driver = webdriver.Chrome(options=option)
+    url = f"https://www.dianping.com/shanghai/ch10/p{page}"
     driver.get(url)
     time.sleep(3)
     content = driver.find_element(By.XPATH,'//*[@id="shop-all-list"]/ul')
     element_text = str(content.get_attribute('innerHTML'))
+    time.sleep(5)
     # print(element_text)
     doc = pq(element_text)
     # wb = Workbook()  # 创建一个新的工作簿
@@ -50,23 +52,34 @@ def openURL(url,page=1,num=2):
                 print(recommend)
                 print(pic)
                 sheet['A' + str(num)] = id
-                sheet['B' + str(num)] = tit
-                sheet['C' + str(num)] = review_num
-                sheet['D' + str(num)] = mean_price
-                sheet['E' + str(num)] = cx
-                sheet['F' + str(num)] = address
-                sheet['G' + str(num)] = recommend
-                sheet['H' + str(num)] = pic
+                sheet['B' + str(num)] = '上海'
+                sheet['C' + str(num)] = tit
+                sheet['D' + str(num)] = review_num
+                sheet['E' + str(num)] = mean_price
+                sheet['F' + str(num)] = cx
+                sheet['G' + str(num)] = address
+                sheet['H' + str(num)] = recommend
+                sheet['I' + str(num)] = pic
                 num = num + 1
             except Exception as e:
                 print(e)
         workbook.save('dzdp.xlsx')
-        time.sleep(3)
+        time.sleep(20)
     except Exception as e:
         print(e)
+    
+    print('===============================')
+    print(f'第{page}页，获取成功')
+    print(num)
+    page = page + 1
+    if page == 5:
+        return False
+    else:
+        time.sleep(3)
+        return openURL(page,num)
     # print(doc.text())
 
 
 if __name__ == '__main__':
     print('开始获取数据')
-    openURL('https://www.dianping.com/shanghai/ch10/d1')
+    openURL(5,62)
